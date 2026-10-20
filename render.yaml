@@ -1,0 +1,37 @@
+# Render Blueprint: one web service and one hourly cron job, sharing one
+# environment group. Fill the secret values in the Render dashboard.
+envVarGroups:
+  - name: bladdersense
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: APP_URL
+        value: https://bladdersense.com
+      - key: EMAIL_FROM
+        value: BladderSense <hello@bladdersense.com>
+
+services:
+  - type: web
+    name: bladdersense
+    runtime: node
+    plan: starter
+    buildCommand: npm ci --include=dev && npm run build
+    preDeployCommand: npm run migrate
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - fromGroup: bladdersense
+
+  - type: cron
+    name: bladdersense-cron
+    runtime: node
+    plan: starter
+    schedule: "5 * * * *"
+    buildCommand: npm ci --omit=dev
+    startCommand: npm run cron
+    envVars:
+      - fromGroup: bladdersense
