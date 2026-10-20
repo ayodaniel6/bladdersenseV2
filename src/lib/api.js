@@ -1,10 +1,21 @@
 // Every call is same-origin and carries the session cookie automatically.
+const TIMEOUT_MS = 20_000
+
 async function request(path, { method = 'GET', body } = {}) {
-  const res = await fetch(`/api${path}`, {
-    method,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
-    body: body ? JSON.stringify(body) : undefined,
-  })
+  let res
+  try {
+    res = await fetch(`/api${path}`, {
+      method,
+      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    })
+  } catch {
+    // Offline, server down, or no answer within 20 seconds.
+    const err = new Error('We could not reach BladderSense. Check your internet connection and try again.')
+    err.status = 0
+    throw err
+  }
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
     const err = new Error(data.error || 'Something went wrong. Please try again.')

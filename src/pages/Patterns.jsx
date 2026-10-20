@@ -4,6 +4,7 @@ import { api } from '../lib/api.js'
 import { useTitle } from '../lib/useTitle.js'
 import RangePicker, { useStoredRange } from '../components/RangePicker.jsx'
 import NightChart from '../components/NightChart.jsx'
+import { LoadError, Loading } from '../components/Status.jsx'
 import { MIN_DAYS_FOR_PATTERNS, PATTERNS_DISCLAIMER, fmt } from '../../shared/diary.js'
 
 export default function Patterns() {
@@ -13,13 +14,18 @@ export default function Patterns() {
   const [summary, setSummary] = useState(null)
   const [error, setError] = useState('')
 
+  function load() {
+    setError('')
+    api.summary(days).then(setSummary).catch((err) => setError(err.message))
+  }
+
   useEffect(() => {
     writeRange(days)
-    api.summary(days).then(setSummary).catch((err) => setError(err.message))
+    load()
   }, [days])
 
-  if (error) return <div className="notice notice--danger"><p>{error}</p></div>
-  if (!summary) return null
+  if (error) return <LoadError title="Your patterns" message={error} onRetry={load} />
+  if (!summary) return <Loading title="Your patterns" />
   const s = summary
 
   return (

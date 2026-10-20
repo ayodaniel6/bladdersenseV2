@@ -31,6 +31,8 @@ const days = [
 ]
 
 await query('DELETE FROM users WHERE lower(email) = $1', [EMAIL])
+// Also reset the sign-in limit (5 emails an hour), which repeated testing hits.
+await query('DELETE FROM login_tokens WHERE lower(email) = $1', [EMAIL])
 const { rows: [user] } = await query(
   `INSERT INTO users (email, first_name, birth_year, timezone, onboarded_at) VALUES ($1, 'Demo', 1960, $2, NOW()) RETURNING id`,
   [EMAIL, tz],

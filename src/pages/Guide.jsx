@@ -8,7 +8,7 @@ export default function Guide() {
     <div className="stack">
       <div>
         <h1>The guide</h1>
-        <p className="lede">Managing the everyday factors that affect bladder control: fluids, sleep, activity and stress. Twelve short sections; read them in any order.</p>
+        <p className="lede">Managing the everyday factors that affect bladder control: fluids, sleep, activity and stress. {guideSections.length} short sections; read them in any order.</p>
       </div>
       <ul className="guide-list">
         {guideSections.map((s) => (

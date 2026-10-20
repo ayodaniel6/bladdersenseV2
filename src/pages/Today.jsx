@@ -4,6 +4,7 @@ import { api } from '../lib/api.js'
 import { useSession } from '../lib/session.jsx'
 import { useTitle } from '../lib/useTitle.js'
 import { Question, Segmented, Stepper } from '../components/Controls.jsx'
+import { LoadError, Loading } from '../components/Status.jsx'
 import {
   ACTIVITY, BACKFILL_DAYS, COUNT_FIELDS, DRINKS, MIN_DAYS_FOR_PATTERNS, NOTES_MAX, SLEEP, STRESS, YES_NO,
   activityLabel, addDays, drinksLabel, formatDate, sleepLabel,
@@ -33,14 +34,19 @@ export default function Today() {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [loadError, setLoadError] = useState('')
 
-  useEffect(() => {
+  function load() {
+    setLoadError('')
     api.entries().then(({ today, entries }) => {
+      const map = new Map(entries.map((e) => [e.date, e]))
       setToday(today)
-      setEntries(new Map(entries.map((e) => [e.date, e])))
-      selectDay(today, new Map(entries.map((e) => [e.date, e])))
-    }).catch((err) => setError(err.message))
-  }, [])
+      setEntries(map)
+      selectDay(today, map)
+    }).catch((err) => setLoadError(err.message))
+  }
+
+  useEffect(load, [])
 
   function selectDay(d, map = entries) {
     const existing = map.get(d)
@@ -84,7 +90,8 @@ export default function Today() {
     }
   }
 
-  if (!today) return error ? <div className="notice notice--danger"><p>{error}</p></div> : null
+  if (loadError) return <LoadError title="Today" message={loadError} onRetry={load} />
+  if (!today) return <Loading title="Today" />
 
   const isToday = date === today
   const days = Array.from({ length: BACKFILL_DAYS }, (_, i) => addDays(today, i - (BACKFILL_DAYS - 1)))

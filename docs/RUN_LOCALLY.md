@@ -145,6 +145,7 @@ In the Neon dashboard, open **Tables**. You'll see `users`, `entries`, `report_l
 | `password authentication failed` or `getaddrinfo ENOTFOUND` | The connection string was copied wrongly. Copy it again from Neon → Connect. |
 | `EADDRINUSE: address already in use :::3000` | The app is already running in another terminal. Close that one, or in `.env` set `PORT=3001` and `APP_URL=http://localhost:3001`, then open http://localhost:3001. |
 | `npm: command not found` / `'npm' is not recognized` | Node.js isn't installed, or the terminal was opened before installing. Close the terminal and open a new one. |
+| "We have sent several emails to this address in the last hour" | That's the sign-in limit (5 an hour per email). For the demo account, run `npm run seed-demo` again to reset it, or use a different made-up email. |
 | The page loads but sign-in says "Something went wrong" | Look at the terminal for the error message and send it to me. |
 
 ## Getting updates

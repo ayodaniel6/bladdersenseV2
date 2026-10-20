@@ -99,7 +99,7 @@ This repository is the implementation of this spec. Where the spec names a file,
 
 ### 7. The core loop was buried
 
-- **Current state.** After sign-in, the Dashboard lists all 12 guide sections next to the tracking and progress cards. It's a reading app with a diary attached. `Dashboard.jsx` also carries 125 lines of a commented-out earlier version.
+- **Current state.** After sign-in, the Dashboard lists all 13 guide sections next to the tracking and progress cards. It's a reading app with a diary attached. `Dashboard.jsx` also carries 125 lines of a commented-out earlier version.
 - **Decision.**
   - **Today is the home screen.** After sign-in, and on every return visit, the user lands on `/today`: either today's check-in form, or what they logged with a link to Patterns.
   - **Primary navigation is three tabs: Today · Patterns · Report.** That is the loop: log, see the pattern, share.
@@ -141,7 +141,7 @@ bladdersense/
 │   ├── pages/               # Landing, SignIn, AuthLink, Welcome, Today, Patterns, Report,
 │   │                        # Settings, Guide, GuideSection, Privacy
 │   ├── components/          # Layout, Controls (Question/Segmented/Stepper), NightChart, RangePicker
-│   ├── content/guide.js     # the 12 guide sections (content kept from v1, emoji removed)
+│   ├── content/guide.js     # the 13 guide sections (content kept from v1, emoji removed)
 │   ├── lib/                 # api.js, session.jsx, useTitle.js
 │   └── styles/app.css       # the design system
 ├── migrations/001_init.sql  # whole schema; later changes are 002_*.sql
@@ -339,7 +339,7 @@ Selected options fill with teal and white text, which reads clearly without rely
 
 **Ships at launch (nothing else):**
 
-1. Landing page, public guide (12 sections) and privacy page.
+1. Landing page, public guide (13 sections) and privacy page.
 2. Passwordless sign-in: email code + link, 20-minute expiry, cross-device and spam guidance, rate limits, 90-day sliding sessions.
 3. One-screen onboarding: first name, year of birth, morning reminder.
 4. The morning check-in: 8 questions plus notes, with editing for the last 7 days.

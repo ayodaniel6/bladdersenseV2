@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router'
 import { useSession } from './lib/session.jsx'
 import Layout from './components/Layout.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
+import { Loading } from './components/Status.jsx'
 import Landing from './pages/Landing.jsx'
 import SignIn from './pages/SignIn.jsx'
 import AuthLink from './pages/AuthLink.jsx'
@@ -18,7 +20,7 @@ import Privacy from './pages/Privacy.jsx'
 function Private({ children, onboarding = false }) {
   const { status, user } = useSession()
   const location = useLocation()
-  if (status === 'loading') return null
+  if (status === 'loading') return <Loading />
   if (status === 'out') return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />
   if (!onboarding && !user.onboarded) return <Navigate to="/welcome" replace />
   return children
@@ -27,14 +29,16 @@ function Private({ children, onboarding = false }) {
 // The landing page is for visitors; a signed-in user goes straight to Today.
 function PublicHome() {
   const { status } = useSession()
-  if (status === 'loading') return null
+  if (status === 'loading') return <Loading />
   if (status === 'in') return <Navigate to="/today" replace />
   return <Landing />
 }
 
 export default function App() {
+  const { pathname } = useLocation()
   return (
     <Layout>
+      <ErrorBoundary key={pathname}>
       <Routes>
         <Route path="/" element={<PublicHome />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -49,6 +53,7 @@ export default function App() {
         <Route path="/settings" element={<Private><Settings /></Private>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </ErrorBoundary>
     </Layout>
   )
 }

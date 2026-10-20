@@ -68,6 +68,7 @@ export default function Report() {
 
       <RangePicker value={days} onChange={(d) => { setDays(d); setCreated(null) }} />
 
+      {!summary && !error && <p className="muted" role="status">Loading your diary…</p>}
       {summary && (
         <p>
           <strong>{summary.daysLogged} of {summary.daysInRange} days logged</strong>, {long(summary.startDate)} to {long(summary.endDate)}.
@@ -75,7 +76,7 @@ export default function Report() {
         </p>
       )}
 
-      {empty ? (
+      {!summary ? null : empty ? (
         <div className="notice notice--neutral">
           <p>There is nothing to report for this period yet.</p>
           <Link to="/today" className="btn">Log today</Link>
