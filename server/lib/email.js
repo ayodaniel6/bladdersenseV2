@@ -4,7 +4,7 @@
 // Emails never contain diary data: email is not a private channel, and the
 // subject line shows on lock screens and shared family computers.
 
-const APP_URL = () => process.env.APP_URL || 'http://localhost:5173'
+const APP_URL = () => process.env.APP_URL || 'http://localhost:3000'
 const FROM = () => process.env.EMAIL_FROM || 'BladderSense <hello@bladdersense.com>'
 
 export async function send({ to, subject, text, html }) {

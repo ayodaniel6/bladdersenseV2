@@ -7,10 +7,12 @@
     "node": "22.x"
   },
   "scripts": {
+    "local": "npm run build && npm start",
+    "seed-demo": "node --env-file-if-exists=.env scripts/seed-demo.js",
     "dev:server": "node --watch --env-file-if-exists=.env server/index.js",
     "dev:client": "vite",
     "build": "vite build",
-    "start": "node server/index.js",
+    "start": "node --env-file-if-exists=.env server/index.js",
     "migrate": "node --env-file-if-exists=.env scripts/migrate.js",
     "cron": "node --env-file-if-exists=.env scripts/cron.js",
     "import-v1": "node --env-file-if-exists=.env scripts/import-v1.js",

@@ -15,21 +15,22 @@ test/        logic tests + end-to-end API test
 
 ## Run it locally
 
-You need Node 22 and a Postgres database (a free Neon branch, or a local Postgres).
+Step-by-step guide for Windows and Mac, including a free database: [`docs/RUN_LOCALLY.md`](docs/RUN_LOCALLY.md). Short version:
 
 ```bash
 npm install
-cp .env.example .env        # set DATABASE_URL
-npm run migrate
-npm run dev:server          # API on :3000 (terminal 1)
-npm run dev:client          # app on http://localhost:5173 (terminal 2)
+cp .env.example .env        # put your Postgres connection string in DATABASE_URL
+npm run migrate             # create the tables
+npm run seed-demo           # optional: demo@bladdersense.local with 13 days of entries
+npm run local               # build and serve on http://localhost:3000
 ```
 
-With no `RESEND_API_KEY` set, sign-in emails print in the server terminal. Copy the code from there.
+With no `RESEND_API_KEY` set, emails (including the sign-in code) print in the terminal.
+
+When changing code, use two terminals for live reload: `npm run dev:server` (API on :3000) and `npm run dev:client` (app on http://localhost:5173; set `APP_URL=http://localhost:5173` in `.env`).
 
 ```bash
 npm test                    # logic tests; the end-to-end test also runs when DATABASE_URL is set
-npm run build && npm start  # production build served on :3000
 ```
 
 ## Deploy
